@@ -25,9 +25,9 @@ module time
 #ifdef _OPENMP
             use omp_lib
 
-            get_time = omp_get_wtime()
+            get_timeR8 = omp_get_wtime()
 #else
-            call cpu_time(get_time)
+            call cpu_time(get_timeR8)
 #endif
         end function get_timeR8
 
@@ -36,9 +36,9 @@ module time
 #ifdef _OPENMP
             use omp_lib
 
-            get_time = omp_get_wtime()
+            get_timeR4 = omp_get_wtime()
 #else
-            call cpu_time(get_time)
+            call cpu_time(get_timeR4)
 #endif
         end function get_timeR4
 
