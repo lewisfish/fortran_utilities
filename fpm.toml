@@ -1,0 +1,9 @@
+name = "utils"
+version = "0.1.0"
+license = "license"
+author = "lewis mcmillan"
+maintainer = ["@lewisfish"]
+copyright = "Copyright 2022, lewis mcmillan"
+
+[build]
+auto-tests = false
