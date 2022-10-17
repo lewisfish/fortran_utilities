@@ -4,10 +4,6 @@ module time
 
     implicit none
 
-    interface get_time
-        module procedure get_timeR4
-        module procedure get_timeR8
-    end interface get_time
 
     interface print_time
         module procedure print_timeR4
@@ -20,30 +16,19 @@ module time
 
     contains
     
-        real(kind=dp) function get_timeR8()
+        real(kind=dp) function get_time()
 
 #ifdef _OPENMP
             use omp_lib
 
-            get_timeR8 = omp_get_wtime()
+            get_time = omp_get_wtime()
 #else
-            call cpu_time(get_timeR8)
+            call cpu_time(get_time)
 #endif
-        end function get_timeR8
-
-        real(kind=sp) function get_timeR4()
-
-#ifdef _OPENMP
-            use omp_lib
-
-            get_timeR4 = omp_get_wtime()
-#else
-            call cpu_time(get_timeR4)
-#endif
-        end function get_timeR4
+        end function get_time
 
 
-        subroutine print_time(time, id)
+        subroutine print_timeR4(time, id)
 
             real(kind=sp), intent(IN) :: time
             integer,       intent(IN) :: id

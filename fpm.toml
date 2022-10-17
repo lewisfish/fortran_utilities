@@ -7,3 +7,7 @@ copyright = "Copyright 2022, lewis mcmillan"
 
 [build]
 auto-tests = false
+
+[preprocess]
+[preprocess.cpp]
+directories = ["src/"]
