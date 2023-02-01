@@ -10,4 +10,4 @@ auto-tests = false
 
 [preprocess]
 [preprocess.cpp]
-directories = ["src/"]
+directories = ["src/progressBar.f90", "src/time.f90"]

@@ -28,32 +28,47 @@ module time
         end function get_time
 
 
-        subroutine print_timeR4(time, id)
+        subroutine print_timeR4(time, length)
 
-            real(kind=sp), intent(IN) :: time
-            integer,       intent(IN) :: id
+            use stringUtils, only : str
 
-            if(id == 0)then
-                if(time >= 60._sp)then
-                   print*, floor((time)/60._sp),"mins", mod(time, 60._sp)/100._sp,"s"
-                else
-                   print*, 'time taken ~',time,'s'
-                end if
+            real(kind=sp),     intent(IN) :: time
+            integer, optional, intent(IN) :: length
+
+            integer :: length_
+
+            if(present(length))then
+                length_ = length
+            else
+                length_ = 6
+            end if
+
+            if(time >= 60._sp)then
+                print*, floor((time)/60._sp),"mins", mod(time, 60._sp)/100._sp,"s"
+            else
+                print*, 'time taken ~'//str(time,length_)//'s'
             end if
         end subroutine print_timeR4
 
-        subroutine print_timeR8(time, id)
+        subroutine print_timeR8(time, length)
 
-            real(kind=dp), intent(IN) :: time
-            integer,       intent(IN) :: id
+            use stringUtils, only : str
 
-            if(id == 0)then
-                if(time >= 60._dp)then
-                   print*, floor((time)/60._dp),"mins", mod(time, 60._dp)/100._dp,"s"
-                else
-                   print*, 'time taken ~',time,'s'
-                end if
+            real(kind=dp),     intent(IN) :: time
+            integer, optional, intent(IN) :: length
+
+            integer :: length_
+
+            if(present(length))then
+                length_ = length
+            else
+                length_ = 6
+            end if
+
+            if(time >= 60._dp)then
+                print*, floor((time)/60._dp),"mins", mod(time, 60._dp)/100._dp,"s"
+            else
+                print*, 'time taken ~'//str(time,length_)//'s'
             end if
         end subroutine print_timeR8
-
 end module time
