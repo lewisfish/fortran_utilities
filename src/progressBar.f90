@@ -1,19 +1,19 @@
 module progressBar
     
-    use iso_fortran_env, only : sp => real32, dp => real64
+    use iso_fortran_env, only : sp => real32, dp => real64, int64, int32
 
     implicit none
     
     type :: pbar
-        integer       :: iters, current_iter, time_remaing(3), time_taken(3), threads
-        real(kind=dp) :: percentage, start_t, start_tt, finish_t, average
-        logical       :: first
+        integer(kind=int64) :: iters, current_iter, time_remaing(3), time_taken(3), threads
+        real(kind=dp)       :: percentage, start_t, start_tt, finish_t, average
+        logical             :: first
         contains
             procedure :: progress => progress_sub
     end type pbar
 
     interface pbar
-        module procedure :: init_pbar_func
+        module procedure :: init_pbar_func32, init_pbar_func64
     end interface pbar
 
     private
@@ -21,32 +21,58 @@ module progressBar
 
     contains
     
-        type(pbar) function init_pbar_func(n)
+        type(pbar) function init_pbar_func32(n)
 
             use omp_lib
 
             implicit none
 
-            integer, intent(IN) :: n
+            integer(kind=int32), intent(IN) :: n
 
 #ifdef _OPENMP
-            init_pbar_func%threads = omp_get_max_threads()
+            init_pbar_func32%threads = omp_get_max_threads()
 #else
-            init_pbar_func%threads = 1
+            init_pbar_func32%threads = 1_int64
 #endif
-            init_pbar_func%iters = n
-            init_pbar_func%current_iter = 0
-            init_pbar_func%time_remaing = 0 
-            init_pbar_func%time_taken = 0
-            init_pbar_func%percentage = 0.0 
-            init_pbar_func%start_t = 0.0
-            init_pbar_func%start_tt = 0.0
-            init_pbar_func%finish_t = 0.0  
-            init_pbar_func%average = 0.0
-            init_pbar_func%first = .true.
+            init_pbar_func32%iters = int(n, kind=int64)
+            init_pbar_func32%current_iter = 0_int64
+            init_pbar_func32%time_remaing = 0_int64
+            init_pbar_func32%time_taken = 0_int64
+            init_pbar_func32%percentage = 0.0 
+            init_pbar_func32%start_t = 0.0
+            init_pbar_func32%start_tt = 0.0
+            init_pbar_func32%finish_t = 0.0  
+            init_pbar_func32%average = 0.0
+            init_pbar_func32%first = .true.
 
-        end function init_pbar_func
+        end function init_pbar_func32
 
+
+        type(pbar) function init_pbar_func64(n)
+
+        use omp_lib
+
+        implicit none
+
+        integer(kind=int64), intent(IN) :: n
+
+#ifdef _OPENMP
+        init_pbar_func64%threads = omp_get_max_threads()
+#else
+        init_pbar_func64%threads = 1_int64
+#endif
+        init_pbar_func64%iters = n
+        init_pbar_func64%current_iter = 0_int64
+        init_pbar_func64%time_remaing = 0_int64
+        init_pbar_func64%time_taken = 0_int64
+        init_pbar_func64%percentage = 0.0 
+        init_pbar_func64%start_t = 0.0
+        init_pbar_func64%start_tt = 0.0
+        init_pbar_func64%finish_t = 0.0  
+        init_pbar_func64%average = 0.0
+        init_pbar_func64%first = .true.
+
+    end function init_pbar_func64
 
         subroutine progress_sub(this)
 

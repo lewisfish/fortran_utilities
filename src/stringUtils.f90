@@ -8,7 +8,8 @@ module stringUtils
     interface str
         module procedure str_I32
         module procedure str_I64
-        module procedure str_Iarray
+        module procedure str_Iarray32
+        module procedure str_Iarray64
         module procedure str_R4
         module procedure str_R4array            
         module procedure str_R8
@@ -28,8 +29,8 @@ contains
 
         implicit none
 
-        integer(int32),    intent(IN)    :: i
-        integer, optional, intent(IN) :: len
+        integer(kind=int32), intent(IN)    :: i
+        integer, optional,   intent(IN) :: len
 
         character(len=:), allocatable :: str_I32
         character(len=100) :: string
@@ -59,8 +60,8 @@ contains
 
         implicit none
 
-        integer(int64),    intent(IN)    :: i
-        integer, optional, intent(IN) :: len
+        integer(kind=int64), intent(IN)    :: i
+        integer, optional,   intent(IN) :: len
 
         character(len=:), allocatable :: str_I64
         character(len=100) :: string
@@ -84,32 +85,63 @@ contains
     end function str_I64
 
 
-    function str_iarray(i)
+    function str_iarray32(i)
+
+        use iso_fortran_env, only : Int32
 
         implicit none
 
-        integer, intent(IN) :: i(:)
+        integer(kind=int32), intent(IN) :: i(:)
 
-        character(len=:), allocatable :: str_iarray
+        character(len=:), allocatable :: str_iarray32
         character(len=100) :: string
         integer :: k, j, length
 
         length = 3*size(i)-1
-        str_iarray = repeat(" ", length)
+        str_iarray32 = repeat(" ", length)
 
         k = 1
         do j = 1, size(i)
             write(string,'(I2.2)') I(j)
             if(j == 1)then
-                str_iarray(k:k+2) = trim(adjustl(string))
+                str_iarray32(k:k+2) = trim(adjustl(string))
                 k = k + 2
             else
-                str_iarray(k:k+2) = ':'//trim(adjustl(string))
+                str_iarray32(k:k+2) = ':'//trim(adjustl(string))
                 k = k + 3
             end if
         end do
 
-    end function str_iarray
+    end function str_Iarray32
+
+    function str_iarray64(i)
+
+        use iso_fortran_env, only : Int64
+
+        implicit none
+
+        integer(kind=int64), intent(IN) :: i(:)
+
+        character(len=:), allocatable :: str_iarray64
+        character(len=100) :: string
+        integer :: k, j, length
+
+        length = 3*size(i)-1
+        str_iarray64 = repeat(" ", length)
+
+        k = 1
+        do j = 1, size(i)
+            write(string,'(I2.2)') I(j)
+            if(j == 1)then
+                str_iarray64(k:k+2) = trim(adjustl(string))
+                k = k + 2
+            else
+                str_iarray64(k:k+2) = ':'//trim(adjustl(string))
+                k = k + 3
+            end if
+        end do
+
+    end function str_iarray64
 
 
     function str_R4(i, len)
